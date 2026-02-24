@@ -22,4 +22,10 @@ void da_append(da* arr, const void* element);
 // Pops last element from the array
 void da_pop(da* arr, void* element);
 
+// Get element of the array at given index
+void da_get(da* arr, size_t index, void* element);
+
+// Set element of the array at given index
+void da_set(da* arr, size_t index, const void* element);
+
 #endif // H_DA

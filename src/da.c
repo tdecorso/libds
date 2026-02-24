@@ -59,3 +59,23 @@ void da_pop(da* arr, void* element) {
     memcpy(element, src, arr->element_size);
     arr->count--;
 }
+
+void da_get(da* arr, size_t index, void* element) {
+    if (!arr) return;
+    if (arr->count == 0) return;
+
+    void* src = arr->data + index * arr->element_size;
+    memcpy(element, src, arr->element_size);
+}
+
+void da_set(da* arr, size_t index, const void* element) {
+    if (!arr) return;
+    
+    if (arr->count < index + 1) {
+        fprintf(stderr, "Error: no data to overwrite at given index.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    void* dest = arr->data + index * arr->element_size;
+    memcpy(dest, element, arr->element_size);
+}
