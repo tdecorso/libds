@@ -4,6 +4,7 @@
 This library currently implements:
   - dynamic arrays
   - stacks (using dynamic arrays)
+  - linked lists
 
 ## Dependencies
   - <stdlib.h>
