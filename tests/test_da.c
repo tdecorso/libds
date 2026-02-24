@@ -51,12 +51,14 @@ bool test_da_append() {
     da_append(arr, &values[1]);
     da_append(arr, &values[2]);
     
-    void* start = arr->data;
-    void* end = arr->data + arr->count * arr->element_size;
+    char* start = (char*) arr->data;
+    char* end = (char*) arr->data + arr->count * arr->element_size;
 
     if (end - start != sizeof(int) * 3) return true;
     if (arr->count != 3) return true;
     if (arr->capacity != 4) return true;
+    
+    da_free(arr);
 
     return false;
 }
@@ -82,6 +84,8 @@ bool test_da_pop() {
     if (results[2] != 1) return true;
     if (arr->count != 0) return true;
 
+    da_free(arr);
+
     return false;
 }
 
@@ -104,6 +108,8 @@ bool test_da_get() {
     if (results[0] != 1) return true;
     if (results[1] != 2) return true;
     if (results[2] != 3) return true;
+
+    da_free(arr);
 
     return false;
 }
@@ -133,6 +139,8 @@ bool test_da_set() {
     if (results[1] != 2) return true;
     if (results[2] != 1) return true;
 
+    da_free(arr);
+
     return false;
 }
 
@@ -149,13 +157,15 @@ bool test_da_count() {
     
     if (da_count(arr) != 3) return true;
 
+    da_free(arr);
+
     return false;
 }
 
 bool test_da_capacity() {
     printf("### Testing capacity...\n");
 
-    da* arr = da_alloc(sizeof(int), 5);
+    da* arr = da_alloc(sizeof(int), 1);
 
     int values[3] = {1, 2, 3};
 
@@ -163,7 +173,9 @@ bool test_da_capacity() {
     da_append(arr, &values[1]);
     da_append(arr, &values[2]);
     
-    if (da_capacity(arr) != 5) return true;
+    if (da_capacity(arr) != 4) return true;
+    
+    da_free(arr);
 
     return false;
 }
