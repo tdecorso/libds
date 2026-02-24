@@ -3,6 +3,7 @@
 ## Features
 This library currently implements:
   - dynamic arrays
+  - stacks (using dynamic arrays)
 
 ## Dependencies
   - <stdlib.h>
