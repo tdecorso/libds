@@ -28,4 +28,10 @@ void da_get(da* arr, size_t index, void* element);
 // Set element of the array at given index
 void da_set(da* arr, size_t index, const void* element);
 
+// Get current number of elements
+size_t da_count(const da* arr);
+
+// Get current capacity
+size_t da_capacity(const da* arr);
+
 #endif // H_DA

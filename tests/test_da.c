@@ -136,6 +136,38 @@ bool test_da_set() {
     return false;
 }
 
+bool test_da_count() {
+    printf("### Testing count...\n");
+
+    da* arr = da_alloc(sizeof(int), 5);
+
+    int values[3] = {1, 2, 3};
+
+    da_append(arr, &values[0]);
+    da_append(arr, &values[1]);
+    da_append(arr, &values[2]);
+    
+    if (da_count(arr) != 3) return true;
+
+    return false;
+}
+
+bool test_da_capacity() {
+    printf("### Testing capacity...\n");
+
+    da* arr = da_alloc(sizeof(int), 5);
+
+    int values[3] = {1, 2, 3};
+
+    da_append(arr, &values[0]);
+    da_append(arr, &values[1]);
+    da_append(arr, &values[2]);
+    
+    if (da_capacity(arr) != 5) return true;
+
+    return false;
+}
+
 int main(void) {
     printf("\n### Testing dynamic array module...\n###\n");
 
@@ -145,6 +177,8 @@ int main(void) {
     TEST(test_da_pop);
     TEST(test_da_get);
     TEST(test_da_set);
+    TEST(test_da_count);
+    TEST(test_da_capacity);
 
     printf("###\n### All tests passed. Bye! \n\n");
     return 0;

@@ -79,3 +79,13 @@ void da_set(da* arr, size_t index, const void* element) {
     void* dest = arr->data + index * arr->element_size;
     memcpy(dest, element, arr->element_size);
 }
+
+size_t da_count(const da* arr) {
+    if (!arr) return 0;
+    return arr->count;
+}
+
+size_t da_capacity(const da* arr) {
+    if (!arr) return 0;
+    return arr->capacity;
+}
