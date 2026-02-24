@@ -10,7 +10,7 @@ This library currently implements:
   - <string.h>
   - <assert.h>
 
-## How to use it
+## Build instructions
 ```code
 git clone git@github.com:tdecorso/libds.git
 cd libds
