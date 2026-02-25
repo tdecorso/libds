@@ -5,11 +5,11 @@
 
 typedef struct node {
     void* data;
-    void* next;
-    void* prev;
+    struct node* next;
+    struct node* prev;
 } node;
 
-typedef struct {
+typedef struct list {
     node* root;
     node* tail;
     size_t count;
@@ -45,5 +45,15 @@ void list_get(list* l, size_t index, void* element);
 
 // Returns current number of elements in the list
 size_t list_count(list* l);
+
+// Returns the pointer to the node at given index
+node* list_node_at(list* l, size_t index);
+
+// Removes element at given index
+void list_remove_at(list* l, size_t index, void* element);
+
+// Inserts element at given index
+void list_insert_at(list* l, size_t index, void* element);
+
 
 #endif // H_LIST

@@ -147,16 +147,77 @@ void list_get(list* l, size_t index, void* element) {
     assert(l != NULL);
     assert(index < l->count);
 
-    node* iter = l->root;
-    for (size_t i = 0; i < index; ++i) {
-        iter = iter->next;
-    }
-
-    assert(iter->data != NULL);
-    memcpy(element, iter->data, l->element_size);
+    node* n = list_node_at(l, index); 
+    assert(n->data != NULL);
+    memcpy(element, n->data, l->element_size);
 }
 
 size_t list_count(list* l) {
     if (l == NULL) return 0;
     return l->count;
+}
+
+node* list_node_at(list* l, size_t index) {
+    assert(l != NULL);
+    assert(index < l->count);
+
+    node* iter = l->root;
+    for (size_t i = 0; i < index; ++i) {
+        iter = iter->next;
+    }
+
+    return iter;
+}
+
+void list_remove_at(list* l, size_t index, void* element) {
+    assert(l != NULL);
+    assert(index < l->count);
+    assert(element != NULL);
+
+    if (index == 0) {
+        list_pop_front(l, element);
+        return;
+    }
+    
+    if (index == l->count - 1) {
+        list_pop_back(l, element);
+        return;
+    }
+
+    node* n = list_node_at(l, index);
+    assert(n->data != NULL);
+    memcpy(element, n->data, l->element_size);
+
+    n->prev->next = n->next;
+    n->next->prev = n->prev;
+    node_free(n);
+    l->count--;
+}
+
+void list_insert_at(list* l, size_t index, void* element) {
+    assert(l != NULL);
+    assert(index <= l->count);
+    assert(element != NULL);
+
+    if (index == 0) {
+        list_push_front(l, element);
+        return;
+    }
+    
+    if (index == l->count) {
+        list_push_back(l, element);
+        return;
+    }
+
+    node* new_node = node_alloc(l->element_size);
+    assert(new_node != NULL);
+    memcpy(new_node->data, element, l->element_size);
+
+    node* n = list_node_at(l, index);
+    assert(n != NULL);
+    new_node->prev = n->prev;
+    n->prev->next = new_node;
+    new_node->next = n;
+    n->prev = new_node;
+    l->count++;
 }
