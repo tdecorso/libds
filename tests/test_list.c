@@ -12,26 +12,26 @@
         }                           \
     } while(0)
 
-bool test_node_alloc() {
-    printf("### Testing node alloc...\n");
+bool test_list_node_alloc() {
+    printf("### Testing list_node alloc...\n");
 
-    node* n = node_alloc(sizeof(int));
+    list_node* n = list_node_alloc(sizeof(int));
 
     if (n == NULL) return true;
     if (n->data == NULL) return true;
     if (n->next != NULL) return true;
     if (n->prev != NULL) return true;
 
-    node_free(n);
+    list_node_free(n);
 
     return false;
 }
 
-bool test_node_free() {
-    printf("### Testing node free...\n");
+bool test_list_node_free() {
+    printf("### Testing list_node free...\n");
 
-    node* n = node_alloc(sizeof(int));
-    node_free(n);
+    list_node* n = list_node_alloc(sizeof(int));
+    list_node_free(n);
     n = NULL;
 
     return false;
@@ -75,8 +75,8 @@ bool test_list_push_front() {
     list_push_front(l, &values[1]);
     list_push_front(l, &values[2]);
 
-    node* second = l->root->next;
-    node* third = l->tail;
+    list_node* second = l->root->next;
+    list_node* third = l->tail;
 
     memcpy(&results[0], l->root->data, sizeof(int));
     memcpy(&results[1], second->data, sizeof(int));
@@ -109,8 +109,8 @@ bool test_list_push_back() {
     list_push_back(l, &values[1]);
     list_push_back(l, &values[2]);
 
-    node* second = l->root->next;
-    node* third = l->tail;
+    list_node* second = l->root->next;
+    list_node* third = l->tail;
 
     memcpy(&results[0], l->root->data, sizeof(int));
     memcpy(&results[1], second->data, sizeof(int));
@@ -233,7 +233,7 @@ bool test_list_count() {
 }
 
 bool test_list_node_at() {
-    printf("### Testing node at...\n");
+    printf("### Testing list node at...\n");
 
     list* l = list_alloc(sizeof(double));
 
@@ -243,16 +243,16 @@ bool test_list_node_at() {
     list_push_back(l, &values[1]);
     list_push_back(l, &values[2]);
 
-    node* first = list_node_at(l, 0);
-    node* second = list_node_at(l, 1);
-    node* third = list_node_at(l, 2);
+    list_node* first = list_node_at(l, 0);
+    list_node* second = list_node_at(l, 1);
+    list_node* third = list_node_at(l, 2);
 
     if (l->root == NULL) return true;
     
     if (!first || !second || !third) return true;
     if (first != l->root) return true;
     if (second != l->root->next) return true;
-    if (third != ((node*)(l->root->next))->next) return true;
+    if (third != ((list_node*)(l->root->next))->next) return true;
 
     list_free(l);
 
@@ -321,8 +321,8 @@ int main(void) {
 
     printf("\n### Testing list module...\n###\n");
 
-    TEST(test_node_alloc);
-    TEST(test_node_free);
+    TEST(test_list_node_alloc);
+    TEST(test_list_node_free);
     TEST(test_list_alloc);
     TEST(test_list_free);
     TEST(test_list_push_front);

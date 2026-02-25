@@ -1,15 +1,25 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "ds/da.h"
 
-#define TEST(fun)                   \
-    do {                            \
-        if ((fun)()) {              \
+#define TEST(fun)                          \
+    do {                                   \
+        if ((fun)()) {                     \
             printf("### Test failed.\n");  \
-            return 1;               \
-        }                           \
+            return 1;                      \
+        }                                  \
     } while(0)
+
+bool test_invariant(da* arr) {
+    if (arr == NULL) return true;
+    if (arr->data == NULL) return true;
+    if (arr->capacity == 0) return true;
+    if (arr->element_size == 0) return true;
+    if (arr->count > arr->capacity) return true;
+    return false;
+}
 
 bool test_da_alloc() {
     printf("### Testing alloc...\n");
@@ -19,8 +29,8 @@ bool test_da_alloc() {
 
     da* arr = da_alloc(elem_size, capacity);
 
-    if (!arr) return true;
-    if (!arr->data) return true;
+    if (test_invariant(arr)) return true;
+
     if (arr->count != 0) return true;
     if (arr->capacity != capacity) return true;
     if (arr->element_size != elem_size) return true;
@@ -34,6 +44,9 @@ bool test_da_free() {
     printf("### Testing free...\n");
 
     da* arr = da_alloc(sizeof(int), 5);
+
+    if (test_invariant(arr)) return true;
+
     da_free(arr);
     arr = NULL;
 
@@ -46,17 +59,21 @@ bool test_da_append() {
     da* arr = da_alloc(sizeof(int), 1);
 
     int values[3] = {1, 2, 3};
+    int results[3] = {0};
 
     da_append(arr, &values[0]);
     da_append(arr, &values[1]);
     da_append(arr, &values[2]);
-    
-    char* start = (char*) arr->data;
-    char* end = (char*) arr->data + arr->count * arr->element_size;
 
-    if (end - start != sizeof(int) * 3) return true;
+    if (test_invariant(arr)) return true;
+    
+    memcpy(&results[0], arr->data, sizeof(int) * 3);
+
     if (arr->count != 3) return true;
     if (arr->capacity != 4) return true;
+    if (results[0] != 1) return true;
+    if (results[1] != 2) return true;
+    if (results[2] != 3) return true;
     
     da_free(arr);
 
@@ -78,6 +95,8 @@ bool test_da_pop() {
     da_pop(arr, &results[0]);
     da_pop(arr, &results[1]);
     da_pop(arr, &results[2]);
+
+    if (test_invariant(arr)) return true;
 
     if (results[0] != 3) return true;
     if (results[1] != 2) return true;
@@ -104,6 +123,8 @@ bool test_da_get() {
     da_get(arr, 0, &results[0]);
     da_get(arr, 1, &results[1]);
     da_get(arr, 2, &results[2]);
+
+    if (test_invariant(arr)) return true;
 
     if (results[0] != 1) return true;
     if (results[1] != 2) return true;
@@ -135,6 +156,8 @@ bool test_da_set() {
     da_get(arr, 1, &results[1]);
     da_get(arr, 2, &results[2]);
 
+    if (test_invariant(arr)) return true;
+
     if (results[0] != 3) return true;
     if (results[1] != 2) return true;
     if (results[2] != 1) return true;
@@ -154,6 +177,8 @@ bool test_da_count() {
     da_append(arr, &values[0]);
     da_append(arr, &values[1]);
     da_append(arr, &values[2]);
+
+    if (test_invariant(arr)) return true;
     
     if (da_count(arr) != 3) return true;
 
@@ -172,6 +197,8 @@ bool test_da_capacity() {
     da_append(arr, &values[0]);
     da_append(arr, &values[1]);
     da_append(arr, &values[2]);
+
+    if (test_invariant(arr)) return true;
     
     if (da_capacity(arr) != 4) return true;
     

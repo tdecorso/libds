@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 
-node* node_alloc(size_t element_size) {
+list_node* list_node_alloc(size_t element_size) {
     assert(element_size != 0);
 
-    node* n = malloc(sizeof(node));
+    list_node* n = malloc(sizeof(list_node));
     assert(n != NULL);
 
     n->data = malloc(element_size);
@@ -19,7 +19,7 @@ node* node_alloc(size_t element_size) {
     return n;
 }
 
-void node_free(node* n) {
+void list_node_free(list_node* n) {
     if (!n) return;
     
     free(n->data);
@@ -52,11 +52,11 @@ void list_free(list* l) {
         return;
     }
 
-    node* iter = l->root;
+    list_node* iter = l->root;
 
     while (iter != NULL) {
-        node* next = iter->next;
-        node_free(iter);
+        list_node* next = iter->next;
+        list_node_free(iter);
         iter = next;
     }
 
@@ -67,7 +67,7 @@ void list_push_front(list* l, const void* element) {
     assert(l != NULL);
     assert(element != NULL);
 
-    node* new_root = node_alloc(l->element_size);
+    list_node* new_root = list_node_alloc(l->element_size);
     assert(new_root != NULL);
     memcpy(new_root->data, element, l->element_size);
 
@@ -88,7 +88,7 @@ void list_push_back(list* l, const void* element) {
     assert(l != NULL);
     assert(element != NULL);
 
-    node* new_tail = node_alloc(l->element_size);
+    list_node* new_tail = list_node_alloc(l->element_size);
     assert(new_tail != NULL);
     memcpy(new_tail->data, element, l->element_size);
 
@@ -113,13 +113,13 @@ void list_pop_front(list* l, void* element) {
     memcpy(element, l->root->data, l->element_size);
     l->count--;
 
-    node* tmp = l->root;
+    list_node* tmp = l->root;
     if (l->root->next == NULL) {
         l->tail = NULL;
     }
     l->root = l->root->next;
     if (l->root != NULL) l->root->prev = NULL;
-    node_free(tmp);
+    list_node_free(tmp);
 }
 
 void list_pop_back(list* l, void* element) {
@@ -128,8 +128,8 @@ void list_pop_back(list* l, void* element) {
     assert(element != NULL);
 
     memcpy(element, l->tail->data, l->element_size);
-    node* prev = l->tail->prev;
-    node* tmp = l->tail;
+    list_node* prev = l->tail->prev;
+    list_node* tmp = l->tail;
     if (prev != NULL) {
         prev->next = NULL;
         l->tail = prev;
@@ -139,7 +139,7 @@ void list_pop_back(list* l, void* element) {
         l->tail = NULL;
     }
 
-    node_free(tmp);
+    list_node_free(tmp);
     l->count--;
 }
 
@@ -147,7 +147,7 @@ void list_get(list* l, size_t index, void* element) {
     assert(l != NULL);
     assert(index < l->count);
 
-    node* n = list_node_at(l, index); 
+    list_node* n = list_node_at(l, index); 
     assert(n->data != NULL);
     memcpy(element, n->data, l->element_size);
 }
@@ -157,11 +157,11 @@ size_t list_count(list* l) {
     return l->count;
 }
 
-node* list_node_at(list* l, size_t index) {
+list_node* list_node_at(list* l, size_t index) {
     assert(l != NULL);
     assert(index < l->count);
 
-    node* iter = l->root;
+    list_node* iter = l->root;
     for (size_t i = 0; i < index; ++i) {
         iter = iter->next;
     }
@@ -184,13 +184,13 @@ void list_remove_at(list* l, size_t index, void* element) {
         return;
     }
 
-    node* n = list_node_at(l, index);
+    list_node* n = list_node_at(l, index);
     assert(n->data != NULL);
     memcpy(element, n->data, l->element_size);
 
     n->prev->next = n->next;
     n->next->prev = n->prev;
-    node_free(n);
+    list_node_free(n);
     l->count--;
 }
 
@@ -209,15 +209,15 @@ void list_insert_at(list* l, size_t index, void* element) {
         return;
     }
 
-    node* new_node = node_alloc(l->element_size);
-    assert(new_node != NULL);
-    memcpy(new_node->data, element, l->element_size);
+    list_node* new_list_node = list_node_alloc(l->element_size);
+    assert(new_list_node != NULL);
+    memcpy(new_list_node->data, element, l->element_size);
 
-    node* n = list_node_at(l, index);
+    list_node* n = list_node_at(l, index);
     assert(n != NULL);
-    new_node->prev = n->prev;
-    n->prev->next = new_node;
-    new_node->next = n;
-    n->prev = new_node;
+    new_list_node->prev = n->prev;
+    n->prev->next = new_list_node;
+    new_list_node->next = n;
+    n->prev = new_list_node;
     l->count++;
 }
