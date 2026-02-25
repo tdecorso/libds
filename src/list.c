@@ -5,13 +5,13 @@
 #include <string.h>
 
 node* node_alloc(size_t element_size) {
-    assert(element_size != 0 && "Invalid element size");
+    assert(element_size != 0);
 
     node* n = malloc(sizeof(node));
-    assert(n != NULL && "Allocation failed");
+    assert(n != NULL);
 
     n->data = malloc(element_size);
-    assert(n->data != NULL && "Allocation failed");
+    assert(n->data != NULL);
 
     n->next = NULL;
     n->prev = NULL;
@@ -31,12 +31,13 @@ void node_free(node* n) {
 }
 
 list* list_alloc(size_t element_size) {
-    assert(element_size != 0 && "Invalid element size");
+    assert(element_size != 0);
 
     list* l = malloc(sizeof(list));
-    assert(l != NULL && "Allocation failed");
+    assert(l != NULL);
 
     l->root = NULL;
+    l->tail = NULL;
     l->count = 0;
     l->element_size = element_size;
 
@@ -63,97 +64,99 @@ void list_free(list* l) {
 }
 
 void list_push_front(list* l, const void* element) {
-    assert(l != NULL && "Invalid list pointer");
-    assert(element != NULL && "Invalid element pointer");
+    assert(l != NULL);
+    assert(element != NULL);
 
     node* new_root = node_alloc(l->element_size);
-    assert(new_root != NULL && "Allocation failed");
+    assert(new_root != NULL);
     memcpy(new_root->data, element, l->element_size);
 
-    if (l->root != NULL) {
-        l->root->prev = new_root;
-        new_root->next = l->root;
+    if (l->root == NULL) {
+        l->root = new_root;
+        l->tail = new_root;
+        l->count++;
+        return;
     }
 
+    new_root->next = l->root;
+    l->root->prev = new_root;
     l->root = new_root;
     l->count++;
 }
 
 void list_push_back(list* l, const void* element) {
-    assert(l != NULL && "Invalid list pointer");
-    assert(element != NULL && "Invalid element pointer");
+    assert(l != NULL);
+    assert(element != NULL);
 
     node* new_tail = node_alloc(l->element_size);
-    assert(new_tail != NULL && "Allocation failed");
+    assert(new_tail != NULL);
     memcpy(new_tail->data, element, l->element_size);
 
-    if (l->root == NULL) {
-        l->root = new_tail;
+    if (l->tail == NULL) {
+        l->tail = new_tail;
+        l->root = l->tail;
         l->count++;
         return;
     }
 
-    node* iter = l->root;
-    while (iter->next != NULL) {
-        iter = iter->next;
-    }
-
-    new_tail->prev = iter;
-    iter->next = new_tail;
+    l->tail->next = new_tail;
+    new_tail->prev = l->tail;
+    l->tail = new_tail;
     l->count++;
 }
 
 void list_pop_front(list* l, void* element) {
-    assert(l != NULL && "Invalid list pointer");
-    assert(l->root != NULL && "Empty list");
-    assert(element != NULL && "Invalid element pointer");
+    assert(l != NULL);
+    assert(l->root != NULL);
+    assert(element != NULL);
 
     memcpy(element, l->root->data, l->element_size);
     l->count--;
 
     node* tmp = l->root;
+    if (l->root->next == NULL) {
+        l->tail = NULL;
+    }
     l->root = l->root->next;
     if (l->root != NULL) l->root->prev = NULL;
     node_free(tmp);
 }
 
 void list_pop_back(list* l, void* element) {
-    assert(l != NULL && "Invalid list pointer");
-    assert(l->root != NULL && "Empty list");
-    assert(element != NULL && "Invalid element pointer");
+    assert(l != NULL);
+    assert(l->root != NULL);
+    assert(element != NULL);
 
-    node* iter = l->root;
-    while (iter->next != NULL) {
-        iter = iter->next;
-    }
-
-    memcpy(element, iter->data, l->element_size);
-    node* prev = iter->prev;
+    memcpy(element, l->tail->data, l->element_size);
+    node* prev = l->tail->prev;
+    node* tmp = l->tail;
     if (prev != NULL) {
         prev->next = NULL;
+        l->tail = prev;
     }
     else {
         l->root = NULL;
+        l->tail = NULL;
     }
 
-    node_free(iter);
+    node_free(tmp);
     l->count--;
 }
 
 void list_get(list* l, size_t index, void* element) {
-    assert(l != NULL && "Invalid list pointer");
-    assert(l->count >= index + 1 && "Index out of bounds");
+    assert(l != NULL);
+    assert(index < l->count);
 
     node* iter = l->root;
     for (size_t i = 0; i < index; ++i) {
         iter = iter->next;
     }
 
-    assert(iter->data != NULL && "Invalid data");
+    assert(iter->data != NULL);
     memcpy(element, iter->data, l->element_size);
 }
 
 size_t list_count(list* l) {
-    assert(l != NULL && "Invalid list pointer");
+    if (l == NULL) return 0;
     return l->count;
 }

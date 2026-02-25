@@ -11,6 +11,7 @@ typedef struct node {
 
 typedef struct {
     node* root;
+    node* tail;
     size_t count;
     size_t element_size;
 } list;

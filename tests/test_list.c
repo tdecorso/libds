@@ -44,6 +44,7 @@ bool test_list_alloc() {
 
     if (l == NULL) return true;
     if (l->root != NULL) return true;
+    if (l->tail != NULL) return true;
     if (l->count != 0) return true;
     if (l->element_size != sizeof(int)) return true;
 
@@ -75,7 +76,7 @@ bool test_list_push_front() {
     list_push_front(l, &values[2]);
 
     node* second = l->root->next;
-    node* third = second->next;
+    node* third = l->tail;
 
     memcpy(&results[0], l->root->data, sizeof(int));
     memcpy(&results[1], second->data, sizeof(int));
@@ -109,7 +110,7 @@ bool test_list_push_back() {
     list_push_back(l, &values[2]);
 
     node* second = l->root->next;
-    node* third = second->next;
+    node* third = l->tail;
 
     memcpy(&results[0], l->root->data, sizeof(int));
     memcpy(&results[1], second->data, sizeof(int));
@@ -147,6 +148,7 @@ bool test_list_pop_front() {
     list_pop_front(l, &results[2]); 
 
     if (l->root != NULL) return true;
+    if (l->tail != NULL) return true;
     if (l->count != 0) return true;
     if (results[0] != 1) return true;
     if (results[1] != 2) return true;

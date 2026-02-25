@@ -9,14 +9,14 @@ da* da_alloc(size_t element_size, size_t capacity)
     if (capacity == 0) capacity = 1;
     da* arr = malloc(sizeof(da));
 
-    assert(arr != NULL && "Allocation failed");
+    assert(arr != NULL);
     
     arr->data = malloc(element_size * capacity);
     arr->count = 0;
     arr->capacity = capacity;
     arr->element_size = element_size;
 
-    assert(arr->data != NULL && "Allocation failed");
+    assert(arr->data != NULL);
 
     return arr;
 }
@@ -28,12 +28,12 @@ void da_free(da* arr) {
 }
 
 void da_append(da* arr, const void* element) {
-    assert(arr != NULL && "Array pointer is null");
+    assert(arr != NULL);
 
     if (arr->count == arr->capacity) {
         void* tmp = realloc(arr->data, arr->capacity * arr->element_size * 2);
 
-        assert(tmp != NULL && "Allocation failed");
+        assert(tmp != NULL);
 
         arr->data = tmp;
         arr->capacity *= 2;
@@ -45,8 +45,8 @@ void da_append(da* arr, const void* element) {
 }
 
 void da_pop(da* arr, void* element) {
-    assert(arr != NULL && "Array pointer is null");
-    assert(arr->count != 0 && "Array is empty");
+    assert(arr != NULL);
+    assert(arr->count != 0);
 
     char* src = (char*) arr->data + (arr->count - 1) * arr->element_size;
     memcpy(element, src, arr->element_size);
@@ -54,16 +54,16 @@ void da_pop(da* arr, void* element) {
 }
 
 void da_get(da* arr, size_t index, void* element) {
-    assert(arr != NULL && "Array pointer is null");
-    assert(arr->count >= index + 1 && "Given index invalid");
+    assert(arr != NULL);
+    assert(index < arr->count);
 
     char* src = (char*) arr->data + index * arr->element_size;
     memcpy(element, src, arr->element_size);
 }
 
 void da_set(da* arr, size_t index, const void* element) {
-    assert(arr != NULL && "Array pointer is null");
-    assert(arr->count >= index + 1 && "Given index invalid");
+    assert(arr != NULL);
+    assert(index < arr->count);
 
     char* dest = (char*) arr->data + index * arr->element_size;
     memcpy(dest, element, arr->element_size);
