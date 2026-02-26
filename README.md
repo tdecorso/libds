@@ -1,5 +1,7 @@
 # TDS
 
+## Simple Data Structures Library in C
+
 :warning: This library has educational purposes only.
 
 ## Features
