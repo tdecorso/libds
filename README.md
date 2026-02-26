@@ -1,22 +1,8 @@
-# Data Structures library in C
+# Data Structures implementation in C
 
 ## Features
-This library currently implements:
+Content:
   - dynamic arrays
   - stacks (using dynamic arrays)
   - linked lists
-
-## Dependencies
-  - <stdlib.h>
-  - <stdio.h>
-  - <string.h>
-  - <assert.h>
-
-## Build instructions
-```code
-git clone git@github.com:tdecorso/libds.git
-cd libds
-mkdir build && cd build
-cmake ..
-make
-```
+  - binary search trees (for integers)
