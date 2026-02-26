@@ -1,4 +1,4 @@
-#include "ds/bst.h"
+#include "tds/bst.h"
 
 #include <assert.h>
 

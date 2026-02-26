@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "ds/list.h"
+#include "tds/list.h"
 
 #define TEST(fun)                   \
     do {                            \

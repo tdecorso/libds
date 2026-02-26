@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "ds/stack.h"
+#include "tds/stack.h"
 
 #define TEST(fun)                   \
     do {                            \

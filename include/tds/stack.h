@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "ds/da.h"
+#include "tds/da.h"
 
 typedef struct {
     da* arr;
