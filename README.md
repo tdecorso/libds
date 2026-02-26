@@ -1,7 +1,8 @@
-# Data Structures implementation in C
+# TDS
+
+:warning: This library has educational purposes only.
 
 ## Features
-Content:
   - dynamic arrays
   - stacks (using dynamic arrays)
   - linked lists
