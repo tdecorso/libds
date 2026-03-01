@@ -39,6 +39,14 @@ typedef struct {
         da_count(ptr)++; \
     } while (0); \
 
+// Sets the numbers of elements of the array to zero
+#define da_clear(ptr) \
+    do { \
+        da_header_t* h = da_header(ptr); \
+        h->count = 0; \
+    } while (0);
+
+
 // Returns pointer to dynamic array header
 #define da_header(ptr) ((da_header_t*) (ptr) - 1)
 
@@ -49,3 +57,4 @@ typedef struct {
 #define da_capacity(ptr) (da_header(ptr)->capacity)
 
 #endif // H_TDS
+
